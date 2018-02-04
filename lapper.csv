@@ -1,0 +1,26 @@
+# Generert med datamaskin.
+# Hvert forsøk hadde 100 lapper der 50 hadde kryss på. Det ble trekt 10 lapper uten tilbakelegging i hvert forsøk.
+# Antall lapper med kryss på ble registrert for hvert forsøk.
+# Totalt 20 forsøk ble gjort.
+
+Forsøk,antall trekte kryss
+0,8
+1,2
+2,6
+3,5
+4,6
+5,7
+6,7
+7,3
+8,4
+9,6
+10,3
+11,5
+12,8
+13,6
+14,5
+15,5
+16,6
+17,7
+18,2
+19,4
