@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from PyPDF2 import PdfFileMerger
 
 # antall trekte lapper med kryss på
 lapper = pd.read_csv('lapper.csv', index_col=0, comment='#')
@@ -70,7 +71,7 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
 
 
 def main():
-    with PdfPages('rapport.pdf') as pdf:
+    with PdfPages('data.pdf') as pdf:
         draw_graph(nedbor, pdf, 'Datasett 1: Månedlig nedbør i Oslo januar måned')
         draw_graph(biler, pdf, 'Datasett 2: Andel elbiler av parkerte biler (totalt 100)', {'kind': 'pie', 'y': 'antall'}, biler.drop('vanlig bil'))
         draw_graph(sykler, pdf, 'Datasett 3: Antall registrerte sykler i løpet av 30 min', {'kind': 'bar'})
@@ -82,10 +83,16 @@ def main():
         draw_graph(holdning, pdf, 'Datasett 6b: Prosentandel nordmenn som hadde positiv holdning til\n'
                                   'at deres sønn/datter var sammen med innvandrer.')
 
-
-
-
         print("PDF SAVED!")
+
+    pdfs = ['frontpage.pdf', 'data.pdf']
+    merger = PdfFileMerger()
+    for pdf in pdfs:
+        merger.append(open(pdf, 'rb'))
+
+    with open('rapport.pdf', 'wb') as fout:
+        merger.write(fout)
+
 
 
 if __name__ == '__main__':
