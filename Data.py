@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from PyPDF2 import PdfFileMerger
 import matplotlib.ticker as ticker
+import zipfile
+import glob
 
 # antall trekte lapper med kryss på
 lapper = pd.read_csv('lapper.csv', index_col=0, comment='#')
@@ -116,6 +118,10 @@ def main():
 
         print("PDFS MERGED TO rapport.pdf")
 
+    zip = zipfile.ZipFile('data.zip', 'w')
+    for file in glob.glob('./*.csv'):
+        zip.write(file)
+    print('csv files zipped to data.zip')
 
 if __name__ == '__main__':
     main()
