@@ -35,6 +35,8 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
         table_data = data
 
     fig, ax = plt.subplots(2)
+    fig.set_size_inches(8.27, 11.69)  # A4 stående på hver side
+
     data.plot(ax=ax[0], **param_dict)
 
     fig.suptitle(title)
@@ -42,13 +44,13 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
 
     ax[1].axis('off')
 
-    gjennomsnitt = [round(table_data.mean()[0], 2)]
+    gjennomsnitt = [round(table_data.mean()[0], 1)]
     median = [table_data.median()[0]]
     modus = table_data.mode().values
     modus = [[item for sublist in modus for item in sublist]]
-    variasjonsbredde = round(table_data.max() - table_data.min(),2)
-    varians = round(table_data.var(),2)
-    standardavvik = round(table_data.std(), 2)
+    variasjonsbredde = round(table_data.max() - table_data.min(),1)
+    varians = round(table_data.var(),1)
+    standardavvik = round(table_data.std(), 1)
 
     # print('\n\n\n\n')
     # print('gjennomsnitt : ', gjennomsnitt)
