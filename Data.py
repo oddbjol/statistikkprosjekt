@@ -63,8 +63,9 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
         cellText=[gjennomsnitt, median, modus, variasjonsbredde, varians, standardavvik],
         colLabels=None,
         loc="center",
-        bbox=(0.2, -0.2, 0.8, 1),
-        cellLoc='left')
+        cellLoc='left',
+        colWidths=[0.6, 0.4],
+        bbox=(0.2, -0.2, 0.8, 1))
 
     pdf.savefig()
     plt.close()
@@ -83,7 +84,7 @@ def main():
         draw_graph(holdning, pdf, 'Datasett 6b: Prosentandel nordmenn som hadde positiv holdning til\n'
                                   'at deres sønn/datter var sammen med innvandrer.')
 
-        print("PDF SAVED!")
+        print("DATA SAVED!")
 
     pdfs = ['frontpage.pdf', 'data.pdf']
     merger = PdfFileMerger()
@@ -93,6 +94,7 @@ def main():
     with open('rapport.pdf', 'wb') as fout:
         merger.write(fout)
 
+        print("PDFS MERGED TO rapport.pdf")
 
 
 if __name__ == '__main__':
