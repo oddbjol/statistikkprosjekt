@@ -26,7 +26,7 @@ biler = pd.read_csv('biler.csv', index_col=0, comment='#')
 
 
 # Tegner en graf/figur til en pdf-fil
-def draw_graph(data, pdf, param_dict=None, table_data=None, title=''):
+def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
     if param_dict is None:
         param_dict = {}
 
@@ -48,14 +48,14 @@ def draw_graph(data, pdf, param_dict=None, table_data=None, title=''):
     variasjonsbredde = round(table_data.max() - table_data.min(),2)
     varians = round(table_data.var(),2)
     standardavvik = round(table_data.std(), 2)
-    print('\n\n\n\n')
 
-    print('gjennomsnitt : ', gjennomsnitt)
-    print('median : ', median)
-    print('modus : ', modus)
-    print('variasjonsbredde : ', variasjonsbredde)
-    print('varians : ', varians)
-    print('standardavvik : ', standardavvik)
+    # print('\n\n\n\n')
+    # print('gjennomsnitt : ', gjennomsnitt)
+    # print('median : ', median)
+    # print('modus : ', modus)
+    # print('variasjonsbredde : ', variasjonsbredde)
+    # print('varians : ', varians)
+    # print('standardavvik : ', standardavvik)
 
     ax[1].table(
         rowLabels=['gjennomsnitt', 'median', 'modus', 'variasjonsbredde', 'varians', 'standardavvik'],
@@ -71,13 +71,19 @@ def draw_graph(data, pdf, param_dict=None, table_data=None, title=''):
 
 def main():
     with PdfPages('rapport.pdf') as pdf:
-        draw_graph(lapper, pdf, {'kind': 'bar'})
-        draw_graph(kontakt, pdf)
-        draw_graph(holdning, pdf)
-        draw_graph(joggetur, pdf)
-        draw_graph(nedbor, pdf)
-        draw_graph(biler, pdf, {'kind': 'pie', 'y': 'antall'}, biler.drop('vanlig bil'))  # TODO: Lag kakediagram av denne.
-        draw_graph(sykler, pdf, {'kind': 'bar'})
+        draw_graph(nedbor, pdf, 'Datasett 1: Månedlig nedbør i Oslo januar måned')
+        draw_graph(biler, pdf, 'Datasett 2: Andel elbiler av parkerte biler (totalt 100)', {'kind': 'pie', 'y': 'antall'}, biler.drop('vanlig bil'))
+        draw_graph(sykler, pdf, 'Datasett 3: Antall registrerte sykler i løpet av 30 min', {'kind': 'bar'})
+        draw_graph(joggetur, pdf, 'Datasett 4: Tiden det tar å jogge en runde')
+        draw_graph(lapper, pdf, 'Datasett 5: Antall trekte lapper med kryss\n'
+                                'Det ble trekt 10 lapper, av 100 der halvparten hadde kryss', {'kind': 'bar'})
+        draw_graph(kontakt, pdf, 'Datasett 6a: Prosentandel nordmenn\n'
+                                 'som hadde kontakt med innvandrere i nabolaget')
+        draw_graph(holdning, pdf, 'Datasett 6b: Prosentandel nordmenn som hadde positiv holdning til\n'
+                                  'at deres sønn/datter var sammen med innvandrer.')
+
+
+
 
         print("PDF SAVED!")
 

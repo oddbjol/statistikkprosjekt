@@ -1,4 +1,3 @@
 type bil,antall
 elbil, 2
 vanlig bil, 98
-# TODO: Ta inn vanlige biler også og lag kakediagram.
