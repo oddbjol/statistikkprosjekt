@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from PyPDF2 import PdfFileMerger
+import matplotlib.ticker as ticker
 
 # antall trekte lapper med kryss på
 lapper = pd.read_csv('lapper.csv', index_col=0, comment='#')
@@ -27,7 +28,7 @@ biler = pd.read_csv('biler.csv', index_col=0, comment='#')
 
 
 # Tegner en graf/figur til en pdf-fil
-def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
+def draw_graph(data, pdf, title='', param_dict=None, table_data=None, x_label=None, y_label=None, tick_interval=None):
     if param_dict is None:
         param_dict = {}
 
@@ -38,6 +39,15 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
     fig.set_size_inches(8.27, 11.69)  # A4 stående på hver side
 
     data.plot(ax=ax[0], **param_dict)
+
+    if x_label is not None:
+        ax[0].set_xlabel(x_label)
+
+    if y_label is not None:
+        ax[0].set_ylabel(y_label)
+
+    if tick_interval is not None:
+        ax[0].xaxis.set_major_locator(ticker.MultipleLocator(tick_interval))
 
     fig.suptitle(title)
     plt.rcParams.update({'legend.fontsize': 6})
@@ -76,15 +86,23 @@ def draw_graph(data, pdf, title='', param_dict=None, table_data=None):
 def main():
     with PdfPages('data.pdf') as pdf:
         draw_graph(nedbor, pdf, 'Datasett 1: Månedlig nedbør i Oslo januar måned')
-        draw_graph(biler, pdf, 'Datasett 2: Andel elbiler av parkerte biler (totalt 100)', {'kind': 'pie', 'y': 'antall'}, biler.drop('vanlig bil'))
+        draw_graph(biler, pdf, 'Datasett 2: Andel elbiler av parkerte biler (totalt 100)', {'kind': 'pie', 'y': 'antall'},
+                   biler.drop('vanlig bil'), y_label='')
         draw_graph(sykler, pdf, 'Datasett 3: Antall registrerte sykler i løpet av 30 min', {'kind': 'bar'})
-        draw_graph(joggetur, pdf, 'Datasett 4: Tiden det tar å jogge en runde')
+        draw_graph(joggetur, pdf, 'Datasett 4: Tiden det tar å jogge en runde',
+                   tick_interval=1)
         draw_graph(lapper, pdf, 'Datasett 5: Antall trekte lapper med kryss\n'
-                                'Det ble trekt 10 lapper, av 100 der halvparten hadde kryss', {'kind': 'bar'})
+                                'Det ble trekt 10 lapper, av 100 der halvparten hadde kryss',
+                   {'kind': 'hist', 'bins': np.arange(0, 11)+0.5},
+                   x_label='Antall lapper med kryss',
+                   y_label='Antall forekomster',
+                   tick_interval=1)
         draw_graph(kontakt, pdf, 'Datasett 6a: Prosentandel nordmenn\n'
-                                 'som hadde kontakt med innvandrere i nabolaget')
+                                 'som hadde kontakt med innvandrere i nabolaget',
+                   y_label='%')
         draw_graph(holdning, pdf, 'Datasett 6b: Prosentandel nordmenn som hadde positiv holdning til\n'
-                                  'at deres sønn/datter var sammen med innvandrer.')
+                                  'at deres sønn/datter var sammen med innvandrer.',
+                   y_label='%')
 
         print("DATA SAVED!")
 
